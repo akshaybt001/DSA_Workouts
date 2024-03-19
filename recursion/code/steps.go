@@ -18,6 +18,6 @@ func helper(num int, steps int) int {
 }
 
 func main() {
-	num := numberOfSteps(41)
+	num := numberOfSteps(10)
 	fmt.Println(num)
 }

@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"math"
+)
+
 type Node struct {
 	key   int
 	left  *Node
@@ -26,8 +31,20 @@ func insert(root *Node, value int) *Node {
 	return root
 }
 
-func (t *Tree)Search(value int)bool{
-	
+func (t *Tree) Search(value int) bool {
+	return search(t.root, value)
+}
+
+func search(root *Node, value int) bool {
+	if root == nil {
+		return false
+	}
+	if root.key < value {
+		return search(root.right, value)
+	} else if root.key > value {
+		return search(root.left, value)
+	}
+	return true
 }
 
 func (t *Tree) Delete(value int) {
@@ -57,4 +74,51 @@ func inorderSuccessor(root *Node) int {
 		current = current.left
 	}
 	return current.key
+}
+func InorderTranversal(root *Node) {
+	if root != nil {
+		InorderTranversal(root.left)
+		fmt.Printf("%d => ", root.key)
+		InorderTranversal(root.right)
+	}
+}
+
+func PreOrderTranversal(root *Node) {
+	if root != nil {
+		fmt.Printf("%d =>", root.key)
+		PreOrderTranversal(root.left)
+		PreOrderTranversal(root.right)
+	}
+}
+
+func PostOrderTraversal(root *Node) {
+	if root != nil {
+		PostOrderTraversal(root.left)
+		PostOrderTraversal(root.right)
+		fmt.Printf("%d =>", root.key)
+	}
+}
+func IsValidBst(node *Node) bool {
+	return isValidBst(node, math.MinInt64, math.MaxInt64)
+}
+
+func isValidBst(node *Node, min, max int) bool {
+	if node == nil {
+		return true
+	}
+	if node.key <= min || node.key >= max {
+		return false
+	}
+	return isValidBst(node.left, min, node.key) && isValidBst(node.right, node.key, max)
+}
+
+func main() {
+	t := Tree{}
+	arr := []int{100, 18, 22, 23, 44, 16, 101}
+	for _, num := range arr {
+		t.Insert(num)
+	}
+	fmt.Println(inorderSuccessor(t.root))
+	PostOrderTraversal(t.root)
+	fmt.Println(t.Search(4))
 }
